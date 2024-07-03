@@ -2,8 +2,17 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './module';
 import { ValidationPipe } from '@nestjs/common';
 
+// handle all environments loaded or not loaded
+const requireEnv = ['SERVER_PORT','HOST' ,'DATABASE_PORT', 'USER_NAME','PASSWORD','DATABASE'];
+const allEnv = new Set(Object.keys(process.env));
+
+const envExists = requireEnv.every(e => allEnv.has(e));
+if (!envExists) console.log('Environment variable not found'), process.exit(1);
+console.log('Environment variable successfully loaded');
+
+
 (async () => {
-  const port = process.env.PORT || 3000;
+  const port = parseInt(process.env.SERVER_PORT, 10) || 4000;
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(port);
