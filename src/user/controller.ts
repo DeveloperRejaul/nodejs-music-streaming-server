@@ -1,33 +1,47 @@
-import { Controller, Get, Post,  Delete, Param, Body,Patch } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, Put, Param, Delete, Get, Headers } from '@nestjs/common';
 import { UserService } from './service';
-import { User} from './model';
+import { User } from './model';
+import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly productsService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() productData): Promise<User> {
-    return this.productsService.create(productData);
+  @Get('auth')
+  auth(@Headers() headers) {
+    return this.userService.auth(headers.authorization);
   }
 
+  @Post('login')
+  login(@Body() body: LoginUserDto) {
+    return this.userService.login(body);
+  }
   @Get()
-  findAll(): Promise<User[]> {
-    return this.productsService.findAll();
+  findAll() {
+    return this.userService.findAll();
   }
-
+  
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<User> {
-    return this.productsService.findOne(Number(id));
+  find(@Param('id') id) {
+    return this.userService.find(Number(id));
   }
 
-  @Patch(':id') 
-  update(@Param('id') id: string, @Body() productData): Promise<[number, User[]]> {
-    return this.productsService.update(Number(id), productData);
+  
+  @Post()
+  @HttpCode(201)
+  create(@Body() user: CreateUserDto): Promise<User> {
+    return this.userService.create(user);
   }
 
+  
+  
+  @Put(':id')
+  update(@Param('id') id , @Body() body: UpdateUserDto) { 
+    return this.userService.update(Number(id), body);
+  }
+  
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<number> {
-    return this.productsService.remove(Number(id));
+  delete(@Param('id') id) { 
+    return this.userService.remove(Number(id));
   }
 }

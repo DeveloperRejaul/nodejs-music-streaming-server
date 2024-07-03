@@ -2,10 +2,8 @@ import { Controller, Get } from '@nestjs/common';
 
 @Controller('/')
 export class AppController {
-   
-   @Get("/")
-   get() {
-    return "Server running";
+  @Get('/')
+  get() {
+    return 'Server running';
   }
-
 }
