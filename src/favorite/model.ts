@@ -7,7 +7,7 @@ import { User } from 'src/user/model';
 @Table
 export class Favorite extends Model<Favorite> {
   @Column({defaultValue: UUIDV4(), primaryKey:true})
-    _id: string;
+    id: string;
   
   @ForeignKey(() => User)
   @Column

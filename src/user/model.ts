@@ -6,7 +6,7 @@ import { Favorite } from 'src/favorite/model';
 export class User extends Model<User> {
 
   @Column({defaultValue:UUIDV4(), primaryKey:true})
-    _id: string;
+    id: string;
 
   @Column({ allowNull: false })
     name: string;

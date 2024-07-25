@@ -5,7 +5,7 @@ import { Favorite } from 'src/favorite/model';
 @Table
 export class Music extends Model<Music> {
   @Column({defaultValue:UUIDV4(), primaryKey:true})
-    _id: string;
+    id: string;
   
   @Column({ allowNull: false })
     name: string;
