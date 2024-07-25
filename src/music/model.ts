@@ -3,21 +3,25 @@ import { Table, Column, Model, HasMany } from 'sequelize-typescript';
 import { Favorite } from 'src/favorite/model';
 
 @Table
-export class User extends Model<User> {
-
+export class Music extends Model<Music> {
   @Column({defaultValue:UUIDV4(), primaryKey:true})
     _id: string;
-
+  
   @Column({ allowNull: false })
     name: string;
 
-  @Column({ allowNull: false, unique: true })
-    email: string;
+  @Column({ allowNull: false})
+    title: string;
 
   @Column({ allowNull: false })
-    password: string;
+    image: string;
+  
+  @Column({ allowNull: false })
+    color: string;
+  
+  @Column({ allowNull: false })
+    url: string;
   
   @HasMany(() => Favorite)
     favorites: Favorite[];
-  
 }

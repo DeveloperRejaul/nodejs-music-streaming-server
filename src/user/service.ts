@@ -9,9 +9,9 @@ import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto';
 export class UserService {
   constructor(
     @InjectModel(User)
-    private readonly userModel: typeof User,
+    private readonly model: typeof User,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
 
   /**
@@ -22,7 +22,7 @@ export class UserService {
   async create(data: CreateUserDto): Promise<User> {
    
     // check if user already exists
-    const foundUser = await this.userModel.findOne({
+    const foundUser = await this.model.findOne({
       where: { email: data.email },
     });
     if (foundUser) throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
@@ -46,16 +46,16 @@ export class UserService {
    */
   async login(data: LoginUserDto) {
    
-    const user = await this.userModel.findOne({ where: { email: data.email }, });
+    const user = await this.model.findOne({ where: { email: data.email }, });
     if (!user) throw new HttpException('Email or password invalid', HttpStatus.BAD_REQUEST);
 
     const isMatch = await bcrypt.compare(data.password, user.password);
     if (isMatch) {
       const payload = { email: user.email, name: user.name };
       const access_token = await this.jwtService.signAsync(payload);
-      return {...user.toJSON(), access_token};
+      return { ...user.toJSON(), access_token };
     }
-    throw new HttpException('Email or password invalid',HttpStatus.BAD_REQUEST);
+    throw new HttpException('Email or password invalid', HttpStatus.BAD_REQUEST);
  
   }
 
@@ -65,11 +65,11 @@ export class UserService {
    * @param data parameters should be object this object contains user name,email,password;
    * @returns User object 
    */
-  async update(id: number , data: UpdateUserDto): Promise<User> { 
+  async update(id: number, data: UpdateUserDto): Promise<User> {
     
-    const [numberOfAffectedRows, [updatedUsers]] = await this.userModel.update(data, {
+    const [numberOfAffectedRows, [updatedUsers]] = await this.model.update(data, {
       where: { id },
-      returning: true, 
+      returning: true,
     });
 
     if (numberOfAffectedRows === 0) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -84,7 +84,7 @@ export class UserService {
    * @returns User object 
    */
   async remove(id: number): Promise<number> {
-    return this.userModel.destroy({ where: { id } });
+    return this.model.destroy({ where: { id } });
   }
 
 
@@ -92,8 +92,8 @@ export class UserService {
    * @description This function using for find all user . 
    * @returns User object 
    */
-  async findAll() { 
-    const users = await this.userModel.findAll();
+  async findAll() {
+    const users = await this.model.findAll();
     if (users.length <= 0) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     return users;
   }
@@ -103,8 +103,8 @@ export class UserService {
    * @param id parameters should be object this object contains user id;
    * @returns User object 
    */
-  async find(id: number) { 
-    const user = await this.userModel.findByPk(id);
+  async find(id: number) {
+    const user = await this.model.findByPk(id);
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     return user;
   }
@@ -115,13 +115,14 @@ export class UserService {
    * @returns User object 
    */
 
-  async auth(token: string) { 
+  async auth(token: string) {
     const decode = this.jwtService.decode(token);
     if (!decode) throw new HttpException('Authorization failed', HttpStatus.UNAUTHORIZED);
 
-    const user = await this.userModel.findOne({ where: { email: decode.email } });
+    const user = await this.model.findOne({ where: { email: decode.email } });
     if (!user) throw new HttpException('Authorization failed', HttpStatus.UNAUTHORIZED);
-      
+     
     return user;
-  } 
+  }
 }
+

@@ -5,42 +5,42 @@ import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly service: UserService) {}
 
   @Get('auth')
   auth(@Headers() headers) {
-    return this.userService.auth(headers.authorization);
+    return this.service.auth(headers.authorization);
   }
 
   @Post('login')
   login(@Body() body: LoginUserDto) {
-    return this.userService.login(body);
+    return this.service.login(body);
   }
   @Get()
   findAll() {
-    return this.userService.findAll();
+    return this.service.findAll();
   }
   
   @Get(':id')
   find(@Param('id') id) {
-    return this.userService.find(Number(id));
+    return this.service.find(Number(id));
   }
 
   
   @Post()
   create(@Body() user: CreateUserDto): Promise<User> {
-    return this.userService.create(user);
+    return this.service.create(user);
   }
 
   
   
   @Put(':id')
   update(@Param('id') id , @Body() body: UpdateUserDto) { 
-    return this.userService.update(Number(id), body);
+    return this.service.update(Number(id), body);
   }
   
   @Delete(':id')
   delete(@Param('id') id) { 
-    return this.userService.remove(Number(id));
+    return this.service.remove(Number(id));
   }
 }

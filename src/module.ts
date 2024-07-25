@@ -4,6 +4,10 @@ import { AppController } from './controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './user/model';
 import { ConfigModule } from '@nestjs/config';
+import { MusicModule } from './music/module';
+import { FavoriteModule } from './favorite/module';
+import { Music } from './music/model';
+import { Favorite } from './favorite/model';
 
 @Module({
   imports: [
@@ -20,10 +24,12 @@ import { ConfigModule } from '@nestjs/config';
       database: process.env.DATABASE,
       synchronize: true,
       autoLoadModels: true,
-      models: [User],
+      models: [User, Music, Favorite],
     }),
    
     UserModule,
+    MusicModule,
+    FavoriteModule
   ],
   controllers: [AppController],
   providers: [],
