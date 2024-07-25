@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Favorite } from './model';
-import { Music } from 'src/music/model';
+import { Music } from 'src/services/music/model';
 
 @Injectable()
 export class Service {
@@ -11,13 +11,20 @@ export class Service {
   ) { }
     
   async create(body) { 
+    // check unique favorite song for single user;
+    const allFavorite = await this.model.findAll({ where: { userId: body.userId } });
+    
+    const exists = allFavorite.some(e => e.musicId === body.musicId);
+    if (exists) throw new HttpException('Music already exists', HttpStatus.BAD_REQUEST);
+
     const favorite = new Favorite(body);
     return await favorite.save();
   }
 
 
-  async getFavorite(id: string) {
+  async getFavorites(id: string) {
     const favorite = await this.model.findAll({ where: { userId: id } });
+
     const favoriteMusics = [];
     if (favorite.length <= 0) return favorite;
     // is not good practice, just for testing //  
@@ -28,7 +35,12 @@ export class Service {
     return favoriteMusics;
   }
 
+
+  async getFavorite(id: string) {
+    return await this.model.findOne({ where: { musicId: id } });
+  }
+
   async delete(id: string) {
-    return await this.model.destroy({ where: {id} });
+    return await this.model.destroy({ where: { musicId: id} });
   }
 }

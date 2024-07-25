@@ -5,11 +5,12 @@ import { Service } from './service';
 export class FavoriteController {
   constructor(private readonly service: Service) {}
 
-  @Post()
-  createFavorite(@Body() body) {
-    return this.service.create(body);
-  }
 
+  @Get('user/:id')
+  getFavorites(@Param() {id}) {
+    return this.service.getFavorites(id);
+  }
+  
   @Get(':id')
   getFavorite(@Param() {id}) {
     return this.service.getFavorite(id);
@@ -18,5 +19,10 @@ export class FavoriteController {
   @Delete(':id')
   delete(@Param() {id}) {
     return this.service.delete(id);
-  } 
+  }
+
+  @Post()
+  createFavorite(@Body() body) {
+    return this.service.create(body);
+  }
 }

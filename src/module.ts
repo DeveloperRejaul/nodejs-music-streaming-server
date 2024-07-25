@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
-import { UserModule } from './user/module';
+import { UserModule } from './services/user/module';
 import { AppController } from './controller';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { User } from './user/model';
+import { User } from './services/user/model';
 import { ConfigModule } from '@nestjs/config';
-import { MusicModule } from './music/module';
-import { FavoriteModule } from './favorite/module';
-import { Music } from './music/model';
-import { Favorite } from './favorite/model';
+import { MusicModule } from './services/music/module';
+import { FavoriteModule } from './services/favorite/module';
+import { Music } from './services/music/model';
+import { Favorite } from './services/favorite/model';
+import { FileModule } from './services/file/module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { Favorite } from './favorite/model';
       envFilePath: ['.env'],
       isGlobal: true,
     }),
+    
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: process.env.HOST,
@@ -29,7 +31,8 @@ import { Favorite } from './favorite/model';
    
     UserModule,
     MusicModule,
-    FavoriteModule
+    FavoriteModule,
+    FileModule
   ],
   controllers: [AppController],
   providers: [],

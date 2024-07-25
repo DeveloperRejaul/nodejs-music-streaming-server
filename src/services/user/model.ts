@@ -1,27 +1,23 @@
 import { UUIDV4 } from 'sequelize';
 import { Table, Column, Model, HasMany } from 'sequelize-typescript';
-import { Favorite } from 'src/favorite/model';
+import { Favorite } from 'src/services/favorite/model';
 
 @Table
-export class Music extends Model<Music> {
+export class User extends Model<User> {
+
   @Column({defaultValue:UUIDV4(), primaryKey:true})
     id: string;
-  
+
   @Column({ allowNull: false })
     name: string;
 
-  @Column({ allowNull: false})
-    title: string;
+  @Column({ allowNull: false, unique: true })
+    email: string;
 
   @Column({ allowNull: false })
-    image: string;
-  
-  @Column({ allowNull: false })
-    color: string;
-  
-  @Column({ allowNull: false })
-    url: string;
+    password: string;
   
   @HasMany(() => Favorite)
     favorites: Favorite[];
+  
 }
