@@ -20,15 +20,11 @@ export class CreateMusicDto {
   @IsNotEmpty()
   @Length(6)
     color: string;
-
-
-  @IsString()
-  @IsNotEmpty()
-    image: string;
-    
-
-  @IsString()
-  @IsNotEmpty()
-    url: string;
 }
 export class UpdateMusicDto extends PartialType(CreateMusicDto) {}
+
+
+export interface ICreateMusic extends CreateMusicDto { 
+  image: string;
+  url: string
+}

@@ -10,7 +10,10 @@ export const saveFile = (file: IFileType) => {
   const uploadPath = join(__dirname, '..', 'upload', fileName);
   const writeStream = createWriteStream(uploadPath);
 
-  return new Promise((resolve, reject) => {
+  return new Promise((
+    resolve: (value: string) => void,
+    reject: (reason?: boolean) => void
+  ) => {
     writeStream.write(file.buffer, (error) => {
       if (error) {
         reject(false);

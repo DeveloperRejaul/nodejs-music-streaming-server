@@ -1,6 +1,6 @@
 import { Controller, Post, Put, Delete, Get, Body, Param, UseInterceptors, UploadedFiles, ParseFilePipeBuilder, HttpStatus} from '@nestjs/common';
 import { MusicService } from './service';
-import { UpdateMusicDto } from './dto';
+import { CreateMusicDto, UpdateMusicDto } from './dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 const MEX_FILE_SIZE = 10 * 1024 * 1024;
 @Controller('music')
@@ -14,7 +14,10 @@ export class MusicController {
     new ParseFilePipeBuilder()
       .addMaxSizeValidator({ maxSize: MEX_FILE_SIZE })
       .build({ errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY })
-  ) file, @Body() body) {
+  ) file, @Body() body: CreateMusicDto) {
+    
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
     return this.service.create(file, body);
   }
 

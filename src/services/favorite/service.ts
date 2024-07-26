@@ -11,10 +11,10 @@ export class Service {
   ) { }
     
   async create(body) { 
-    // check unique favorite song for single user;
-    const allFavorite = await this.model.findAll({ where: { userId: body.userId } });
+    const exists = await this.model.findOne({
+      where: { userId: body.userId, musicId: body.musicId },
+    });
     
-    const exists = allFavorite.some(e => e.musicId === body.musicId);
     if (exists) throw new HttpException('Music already exists', HttpStatus.BAD_REQUEST);
 
     const favorite = new Favorite(body);
@@ -23,16 +23,10 @@ export class Service {
 
 
   async getFavorites(id: string) {
-    const favorite = await this.model.findAll({ where: { userId: id } });
-
-    const favoriteMusics = [];
-    if (favorite.length <= 0) return favorite;
-    // is not good practice, just for testing //  
-    for (let i = 0; i < favorite.length; i++) {
-      const music = await Music.findOne({ where: { id: favorite[i].musicId } });
-      favoriteMusics.push(music);
-    }
-    return favoriteMusics;
+    const favorite = await this.model.findAll({
+      where: { userId: id }, include: { model: Music}
+    });
+    return favorite.map(fav => fav.music);
   }
 
 

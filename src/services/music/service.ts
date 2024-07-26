@@ -1,11 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Music } from './model';
 import { InjectModel } from '@nestjs/sequelize';
-import type { UpdateMusicDto } from './dto';
+import type { ICreateMusic, UpdateMusicDto } from './dto';
 import { saveFile } from 'src/utils/file';
 import type { IFileType } from 'src/types/fileTypes';
-
-
 
 @Injectable()
 export class MusicService {
@@ -18,7 +16,7 @@ export class MusicService {
     return await this.model.findAll();  
   }
     
-  async create(file: IFileType[], body) {
+  async create(file: IFileType[], body: ICreateMusic) {
     const audio = file[0];
     const image = file[1];
     if (audio.mimetype.includes('audio') && image.mimetype.includes('image')) { 
@@ -34,7 +32,7 @@ export class MusicService {
   
   
   async update(id: number, body: UpdateMusicDto) { 
-    return await this.model.update(body, { where: {id} ,returning: true, });
+    return await this.model.update(body, { where: {id} ,returning: true });
   }
 
   async delete(id: number) {
