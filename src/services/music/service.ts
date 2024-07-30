@@ -15,11 +15,14 @@ export class MusicService {
   async get() { 
     return await this.model.findAll();  
   }
-    
+   
+  // only support file types [ image/*, audio/* ]
   async create(file: IFileType[], body: ICreateMusic) {
     const audio = file[0];
     const image = file[1];
     if (audio.mimetype.includes('audio') && image.mimetype.includes('image')) { 
+      console.log('hello');
+      
       const audioFileName = await saveFile(audio);
       const imageFileName = await saveFile(image);
       body.image = imageFileName;
@@ -27,7 +30,7 @@ export class MusicService {
       const music = new Music(body);
       return await music.save();
     }
-    throw new HttpException('Music already exists', HttpStatus.BAD_REQUEST);
+    throw new HttpException('Something went wrong', HttpStatus.BAD_REQUEST);
   }
   
   

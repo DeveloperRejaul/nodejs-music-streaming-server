@@ -4,9 +4,8 @@ import type { IFileType } from 'src/types/fileTypes';
 import { random } from './random';
 
 export const saveFile = (file: IFileType) => { 
-  const extension = file.originalname.split('.');
-  const index = extension.length - 1;
-  const fileName = `${random()}.${extension[index]}`;
+  const ext = file.originalname.split('.').pop();
+  const fileName = `${random()}.${ext}`;
   const uploadPath = join(__dirname, '..', 'upload', fileName);
   const writeStream = createWriteStream(uploadPath);
 

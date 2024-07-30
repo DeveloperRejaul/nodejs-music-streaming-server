@@ -31,7 +31,9 @@ export class Service {
 
 
   async getFavorite(id: string) {
-    return await this.model.findOne({ where: { musicId: id } });
+    const res = await this.model.findOne({ where: { musicId: id } });
+    if (res == null) throw new HttpException('Music Not exists', HttpStatus.BAD_REQUEST);
+    return res;
   }
 
   async delete(id: string) {

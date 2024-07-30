@@ -6,8 +6,14 @@ import { join } from 'path';
 export class FileController {
 
   @Get(':id')
-  getFile(@Param() {id}) {
+  getFile(@Param() { id }: {id: string}) {
+    const ext = id.split('.').pop();
+    const imageExt = ['jpeg', 'jpg', 'png'];
+    
     const file = createReadStream(join(process.cwd(), 'dist', 'upload', id));
-    return new StreamableFile(file);
+    return new StreamableFile(file, {
+      type: imageExt.includes(ext) ? 'image/*' : 'audio/*',
+      disposition: `attachment; filename="${id}"`,
+    });
   }
 }
