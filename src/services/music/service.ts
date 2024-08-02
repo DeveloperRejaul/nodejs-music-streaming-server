@@ -18,11 +18,14 @@ export class MusicService {
    
   // only support file types [ image/*, audio/* ]
   async create(file: IFileType[], body: ICreateMusic) {
+    
+    console.log(file);
+    console.log(body);
+    
+    
     const audio = file[0];
     const image = file[1];
     if (audio.mimetype.includes('audio') && image.mimetype.includes('image')) { 
-      console.log('hello');
-      
       const audioFileName = await saveFile(audio);
       const imageFileName = await saveFile(image);
       body.image = imageFileName;
